@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Meal Planner</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Welcome to Meal Planner</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#" onclick="redirectToSignIn()">Sign In</a></li>
+            <li><a href="#" onclick="redirectToSignUp()">Sign Up</a></li>
+        </ul>
+    </nav>
+    <section>
+        <h2>About Meal Planner</h2>
+        <p>Meal Planner is an online platform that helps you plan and organize your meals. With Meal Planner, you can:</p>
+        <ul>
+            <li>Create customized meal plans for the week</li>
+            <li>Explore a variety of recipes and save your favorites</li>
+            <li>Generate shopping lists based on your meal plans</li>
+            <li>Track your nutrition and dietary goals</li>
+        </ul>
+    </section>
+    <footer>
+        <p>&copy; 2023 Meal Planner. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function redirectToSignIn() {
+            window.location.href = "http://localhost:3000/signin";
+        }
+
+        function redirectToSignUp() {
+            window.location.href = "http://localhost:3002/signup";
+        }
+    </script>
+</body>
+</html>

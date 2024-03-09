@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add Recipe</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f1f1f1;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    form {
+      max-width: 400px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      margin-bottom: 15px;
+    }
+
+    button[type="submit"] {
+      background-color: #4caf50;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <h1>Add Recipe</h1>
+  <form id="recipeForm">
+    <label for="recipeName">Recipe Name:</label>
+    <input type="text" id="recipeName" name="recipeName" required><br>
+
+    <label for="recipeDescription">Recipe Description:</label>
+    <textarea id="recipeDescription" name="recipeDescription" required></textarea><br>
+
+    <label for="portions">Portions:</label>
+    <input type="number" id="portions" name="portions" required><br>
+
+    <button type="submit">Insert Recipe</button>
+  </form>
+
+  <script>
+    document.getElementById('recipeForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent the default form submission
+  
+      // Get the form inputs
+      var recipeName = document.getElementById('recipeName').value;
+      var recipeDescription = document.getElementById('recipeDescription').value;
+      var portions = document.getElementById('portions').value;
+  
+      // Prepare the data to send
+      var data = {
+        recipeName: recipeName,
+        recipeDescription: recipeDescription,
+        portions: portions
+      };
+  
+      // Send a POST request to the server
+      fetch('/newrecipe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+      .then(function(response) {
+        if (response.ok) {
+          console.log('Recipe inserted successfully');
+          // Optionally, display a success message to the user
+          alert('Recipe inserted successfully');
+  
+          // Fetch all ingredients from the server
+          fetch('/newrecipe')  // Update the endpoint to match the server route
+            .then(function(response) {
+              if (response.ok) {
+                return response.json();
+              } else {
+                throw new Error('Error fetching ingredients');
+              }
+            })
+            .then(function(data) {
+              // Clear the ingredient list
+              var ingredientList = document.getElementById('ingredient-list');
+              ingredientList.innerHTML = '';
+  
+              // Add each ingredient to the list
+              data.ingredients.forEach(function(ingredient) {
+                var li = document.createElement('li');
+                li.textContent = ingredient.IngredientName;
+                ingredientList.appendChild(li);
+              });
+  
+              // Display all ingredients below the buttons
+              var allIngredientsList = document.getElementById('all-ingredients-list');
+              allIngredientsList.innerHTML = '';
+  
+              // Add each ingredient to the list
+              data.ingredients.forEach(function(ingredient) {
+                var li = document.createElement('li');
+                li.textContent = ingredient.IngredientName;
+                allIngredientsList.appendChild(li);
+              });
+            })
+            .catch(function(error) {
+              console.error('Error fetching ingredients:', error.message);
+            });
+        } else {
+          console.error('Error inserting recipe');
+          // Optionally, display an error message to the user
+          alert('Error inserting recipe');
+        }
+      })
+      .catch(function(error) {
+        console.error('Error inserting recipe:', error.message);
+        // Optionally, display an error message to the user
+        alert('Error inserting recipe');
+      });
+    });
+  </script>
+  
+</body>
+</html>
